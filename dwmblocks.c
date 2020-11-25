@@ -14,7 +14,7 @@ typedef struct {
 	unsigned int signal;
 } Block;
 void sighandler(int num);
-void buttonhandler(int sig, siginfo_t *si, void *ucontext);
+// void buttonhandler(int sig, siginfo_t *si, void *ucontext);
 void replace(char *str, char old, char new);
 void remove_all(char *str, char to_remove);
 void getcmds(int time);
@@ -119,7 +119,7 @@ void setupsignals()
 			sigaddset(&sa.sa_mask, SIGRTMIN+blocks[i].signal);
 		}
 	}
-	sa.sa_sigaction = buttonhandler;
+	// sa.sa_sigaction = buttonhandler;
 	sa.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &sa, NULL);
 	struct sigaction sigchld_action = {
@@ -190,29 +190,29 @@ void sighandler(int signum)
 	writestatus();
 }
 
-void buttonhandler(int sig, siginfo_t *si, void *ucontext)
-{
-	char button[2] = {'0' + si->si_value.sival_int & 0xff, '\0'};
-	pid_t process_id = getpid();
-	sig = si->si_value.sival_int >> 8;
-	if (fork() == 0)
-	{
-		const Block *current;
-		for (int i = 0; i < LENGTH(blocks); i++)
-		{
-			current = blocks + i;
-			if (current->signal == sig)
-				break;
-		}
-		char shcmd[1024];
-		sprintf(shcmd,"%s && kill -%d %d",current->command, current->signal+34,process_id);
-		char *command[] = { "/bin/sh", "-c", shcmd, NULL };
-		setenv("BLOCK_BUTTON", button, 1);
-		setsid();
-		execvp(command[0], command);
-		exit(EXIT_SUCCESS);
-	}
-}
+// void buttonhandler(int sig, siginfo_t *si, void *ucontext)
+// {
+// 	char button[2] = {'0' + si->si_value.sival_int & 0xff, '\0'};
+// 	pid_t process_id = getpid();
+// 	sig = si->si_value.sival_int >> 8;
+// 	if (fork() == 0)
+// 	{
+// 		const Block *current;
+// 		for (int i = 0; i < LENGTH(blocks); i++)
+// 		{
+// 			current = blocks + i;
+// 			if (current->signal == sig)
+// 				break;
+// 		}
+// 		char shcmd[1024];
+// 		sprintf(shcmd,"%s && kill -%d %d",current->command, current->signal+34,process_id);
+// 		char *command[] = { "/bin/sh", "-c", shcmd, NULL };
+// 		setenv("BLOCK_BUTTON", button, 1);
+// 		setsid();
+// 		execvp(command[0], command);
+// 		exit(EXIT_SUCCESS);
+// 	}
+// }
 
 #endif
 

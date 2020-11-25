@@ -1,6 +1,7 @@
 //Modify this file to change what commands output to your statusbar, and recompile using the make command.
 static const Block blocks[] = {
-        {"", "date +'%a %d-%b-%Y %R'", 5, 0},
+        {" ", "date +'%a %d-%b-%Y %R'", 5, 0},
+        {"", "volume_status", 0, 10},
         {"", "battery_status", 5, 0},
 };
 

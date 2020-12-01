@@ -1,8 +1,9 @@
 //Modify this file to change what commands output to your statusbar, and recompile using the make command.
 static const Block blocks[] = {
         {" ", "date +'%a %d-%b-%Y %R'", 5, 0},
+        {"", "cpu_status", 5, 0},
         {"", "volume_status", 0, 10},
-        {"", "battery_status", 5, 0},
+        {"", "battery_status", 2, 0},
 };
 
 //Sets delimiter between status commands. NULL character ('\0') means no delimiter.
